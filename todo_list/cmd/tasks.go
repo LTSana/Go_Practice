@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"encoding/csv"
@@ -8,88 +8,6 @@ import (
 	"text/tabwriter"
 	"time"
 )
-
-type task struct {
-	id          int
-	description string
-	completed   bool
-	created     int
-}
-
-func main() {
-
-	// Check if the user has provided an action
-	if len(os.Args) < 2 {
-		fmt.Println("Please specify an action")
-		return
-	}
-
-	// Check the action
-	switch os.Args[1] {
-	case "add":
-
-		// Check if the user provided a description
-		if len(os.Args) < 3 {
-			fmt.Println("Please specify a task")
-			return
-		}
-
-		// Pass the description to the functions parameter
-		addTask(os.Args[2])
-
-	case "list":
-
-		// Check if the users action is valid
-		if len(os.Args) == 3 {
-			switch os.Args[2] {
-			case "-a":
-				listTasks(true)
-			case "--all":
-				listTasks(true)
-			default:
-				listTasks(false)
-			}
-		} else {
-			listTasks(false)
-		}
-
-	case "complete":
-
-		// Check if the user provided the task ID
-		if len(os.Args) < 3 {
-			fmt.Println("Please specify a task ID")
-			return
-		}
-
-		// Check if the user provided a valid int
-		taskId, err := strconv.Atoi(os.Args[2])
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		// Set the task as completed
-		completeTask(taskId)
-
-	case "delete":
-
-		// Check if the user provided the task ID
-		if len(os.Args) < 3 {
-			fmt.Println("Please specify a task ID")
-			return
-		}
-
-		// Check if the user provided a valid int
-		taskId, err := strconv.Atoi(os.Args[2])
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		// Delete the task
-		deleteTask(taskId)
-	default:
-		fmt.Println("Invalid command. Please use add, list or delete")
-	}
-}
 
 func addTask(s string) error {
 
@@ -187,6 +105,9 @@ func listTasks(show bool) error {
 
 		// Get the time diff
 		t1, err := time.Parse("2006/01/02 15:04:05.00000", time.Now().Format("2006/01/02 15:04:05.00000"))
+		if err != nil {
+			return err
+		}
 		t2, err := time.Parse("2006/01/02 15:04:05.00000", task[3])
 		if err != nil {
 			fmt.Println(err)
@@ -194,15 +115,13 @@ func listTasks(show bool) error {
 		}
 		taskTimeDiff := t1.Sub(t2)
 
-		formattedString := fmt.Sprintf("")
+		var formattedString string
 		if taskTimeDiff.Seconds() > 1.0 && taskTimeDiff.Minutes() < 2.0 && taskTimeDiff.Hours() < 1.0 {
 			formattedString = fmt.Sprintf("%.0f seconds ago", taskTimeDiff.Seconds())
 		} else if taskTimeDiff.Minutes() > 1.0 && taskTimeDiff.Hours() < 2.0 {
 			formattedString = fmt.Sprintf("%.0f minutes ago", taskTimeDiff.Minutes())
 		} else if taskTimeDiff.Hours() > 1.0 {
 			formattedString = fmt.Sprintf("%.0f hours ago", taskTimeDiff.Hours())
-		} else {
-			formattedString = fmt.Sprintf("Now")
 		}
 
 		// Check if the task is completed

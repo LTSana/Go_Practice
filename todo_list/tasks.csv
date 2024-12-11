@@ -1,7 +1,8 @@
 id,Task,completed,created
 1,Test,false,2024/12/09 22:02:06.80481
 3,Test 3,true,2024/12/09 22:02:16.46060
-4,Test 4,false,2024/12/10 00:11:21.89901
-5,Test 5,false,2024/12/10 00:38:15.43406
+4,Test 4,true,2024/12/10 00:11:21.89901
 6,Change my keyboard mapping to use escape/control,false,2024/12/10 00:44:37.30737
 7,Lets go have hot chocolate at 5PM,false,2024/12/10 16:49:11.40041
+8,"Hello, World!",false,2024/12/11 19:44:11.31255
+9,Clean the car,false,2024/12/11 20:03:03.85625
