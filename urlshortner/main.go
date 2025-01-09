@@ -152,6 +152,9 @@ func urlForm(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 func shortURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
+	// Get all the templates
+	tmpl := template.Must(template.New("").ParseGlob("./templates/*"))
+
 	shortURL := r.PathValue("url")
 
 	// Check if the URL is already in the database
@@ -171,6 +174,11 @@ func shortURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			redURL = res.url
 			break
 		}
+	}
+
+	// Handle URL not found
+	if redURL == "" {
+		tmpl.ExecuteTemplate(w, "404.html", PageData{})
 	}
 
 	http.Redirect(w, r, redURL, http.StatusTemporaryRedirect)
