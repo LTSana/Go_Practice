@@ -26,7 +26,7 @@ type URLS struct {
 func main() {
 
 	// Connect to the database
-	connectStr := "postgresql://postgres:sana12345@localhost:5433/urlshortener?sslmode=disable"
+	connectStr := "postgresql://postgres:oierfjoeijdeov@localhost:5433/urlshortener?sslmode=disable"
 	db, err := sql.Open("postgres", connectStr)
 	if err != nil {
 		log.Fatalln(err)
